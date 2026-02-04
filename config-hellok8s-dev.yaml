@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-hellok8s
+data:
+  DB_URL: "http://DB_ADDRESS_DEV"
