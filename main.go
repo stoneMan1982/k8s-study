@@ -1,10 +1,19 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"demo/internal/bootstrap"
+	"demo/internal/user"
+	"demo/pkg/module"
 )
 
 func hello(w http.ResponseWriter, req *http.Request) {
@@ -17,6 +26,34 @@ func hello(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	bootstrap.RegisterInternalModules(module.DefaultRegistry)
+	if err := module.StartModules(ctx); err != nil {
+		panic(err)
+	}
+	if api, ok := module.GetService[*user.API]("user"); ok {
+		log.Println("user module status:", api.Status())
+	}
+	defer func() {
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		_ = module.StopModules(shutdownCtx)
+	}()
+
 	http.HandleFunc("/", hello)
-	http.ListenAndServe(":3000", nil)
+
+	server := &http.Server{Addr: ":3000"}
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			panic(err)
+		}
+	}()
+
+	<-ctx.Done()
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	_ = server.Shutdown(shutdownCtx)
+	log.Println("server exited gracefully")
 }
