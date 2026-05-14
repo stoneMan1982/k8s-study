@@ -35,7 +35,7 @@ func (m *ChannelModule) MetaData() module.MetaData {
 }
 
 func (m *ChannelModule) GetService() interface{} {
-	return m.api
+	return m.svc
 }
 
 func (m *ChannelModule) Start(ctx context.Context) error {

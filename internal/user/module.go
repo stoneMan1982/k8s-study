@@ -34,7 +34,7 @@ func (u *UserModule) MetaData() module.MetaData {
 }
 
 func (u *UserModule) GetService() interface{} {
-	return u.api
+	return u.svc
 }
 
 func (u *UserModule) Start(ctx context.Context) error {

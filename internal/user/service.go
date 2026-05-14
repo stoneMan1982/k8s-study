@@ -2,6 +2,7 @@ package user
 
 import "sync"
 
+
 // Service holds the internal state for the user module.
 type Service struct {
 	mu      sync.RWMutex

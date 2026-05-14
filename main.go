@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"demo/internal/bootstrap"
-	"demo/internal/user"
 	"demo/pkg/module"
 )
 
@@ -33,9 +32,9 @@ func main() {
 	if err := module.StartModules(ctx); err != nil {
 		panic(err)
 	}
-	if api, ok := module.GetService[*user.API]("user"); ok {
-		log.Println("user module status:", api.Status())
-	}
+
+	module.ListModules()
+
 	defer func() {
 		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()

@@ -1,5 +1,6 @@
 # Venus deploy
 
+安装需要在root用户下完成
 
 ## 部署类型 
 
@@ -152,10 +153,10 @@ sudo bash ./install.sh -f config.yaml -o install
 
 ```sh
 # 使用域名
-curl http://registry.ghostcloud.cn:8080/registry.ghostcloud.cn.crt -o /etc/docker/certs.d/registry.ghostcloud.cn/ca.crt
+curl http://192.168.3.36:5244/d/software/%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/registry.ghostcloud.cn.crt -o /etc/docker/certs.d/registry.ghostcloud.cn/ca.crt
 
 # 使用IP
-curl http://10.0.3.13:8080/registry.ghostcloud.cn.crt -o /etc/docker/certs.d/registry.ghostcloud.cn/ca.crt
+curl http://10.0.3.13/registry.ghostcloud.cn.crt -o /etc/docker/certs.d/registry.ghostcloud.cn/ca.crt
 ```
 
 ### docker login  
@@ -182,17 +183,25 @@ docker run -idt --name venus-license-keygen -p 30010:8080  registry.ghostcloud.c
 
 
 
-curl -H 'Content-Type: application/json' -d '{"product": {"finger_print": "6dfcda7413026dd1","name": "venus","version": "trial"},"user": {"common_name": "ghostcloud.cn","phone": "12345678901","company": "Ghostcloud Co.,Ltd","email": "develop@ghostcloud.cn","description": "trail license sign from Ghostcloud Co.,Ltd"},"grants": {"expire": "2092-01-01T00:00:00+08:00","node_limits": {"master": 10,"node": 50},"user_limit": 0,"resource_limit": {"cpu": "*","memory": "*","disk": "*"},"authorities": ["*:*:*"]}}' -X POST http://192.168.23.110:30010/v1/keygen
+curl -H 'Content-Type: application/json' -d '{"product": {"finger_print": "1154d77a214e0827","name": "venus","version": "trial"},"user": {"common_name": "ghostcloud.cn","phone": "12345678901","company": "Ghostcloud Co.,Ltd","email": "develop@ghostcloud.cn","description": "trail license sign from Ghostcloud Co.,Ltd"},"grants": {"expire": "2092-01-01T00:00:00+08:00","node_limits": {"master": 10,"node": 50},"user_limit": 0,"resource_limit": {"cpu": "*","memory": "*","disk": "*"},"authorities": ["*:*:*"]}}' -X POST http://192.168.23.110:30010/v1/keygen
 
 ```
 
 以上命令最终会返回：  
 
 ```json
-{"message":"ok","data":"fec3615cd03b5ae3fecca162b0bc5336109567e9016b29bebfca8fde1e9fe3832c951b5090089900d5147347654c6bfce38f9c7e6e04865cbbcae6a73de67092de"}
+{"message":"ok","data":"b6f502d3cffc4e881544225a57231ffd77a9bc76fe36ef976c733f114e8d04bb5320bd2bcecbbbb4d9b39b907a5960cb37fe3af674cd3bd11bd1a7c7bf3040d8c6"}
 ```
 
 其中data部分就是授权码
+
+### 查看Deployments  
+
+```sh
+kubectl get deployments --all-namespaces
+```
+
+![deployment](./deployment.png)
 
 ### 登录界面  
 
