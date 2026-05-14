@@ -1,6 +1,9 @@
 package channel
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 // Service holds the internal state for the channel module.
 type Service struct {
@@ -30,4 +33,9 @@ func (s *Service) Started() bool {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	return s.started
+}
+
+func (s *Service) JoinChannel(userID, channelID string) error {
+	fmt.Println("User [", userID, "] joining channel: [", channelID, "]")
+	return nil
 }

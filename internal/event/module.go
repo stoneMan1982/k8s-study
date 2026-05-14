@@ -35,7 +35,7 @@ func (m *EventModule) MetaData() module.MetaData {
 }
 
 func (m *EventModule) GetService() interface{} {
-	return m.api
+	return m.svc
 }
 
 func (m *EventModule) Start(ctx context.Context) error {

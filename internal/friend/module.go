@@ -35,7 +35,7 @@ func (m *FriendModule) MetaData() module.MetaData {
 }
 
 func (m *FriendModule) GetService() interface{} {
-	return m.api
+	return m.svc
 }
 
 func (m *FriendModule) Start(ctx context.Context) error {

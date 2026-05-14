@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Config
+clusters:
+- name: master1-vaqns
+  cluster:
+    server: https://127.0.0.1:6443
+    certificate-authority: /etc/venus/pki/ca.crt
+users:
+- name: system:master1-vaqns
+  user:
+    client-certificate: /etc/venus/kubernetes/masters.crt
+    client-key: /etc/venus/kubernetes/masters.key
+contexts:
+- context:
+    cluster: master1-vaqns
+    user: system:master1-vaqns
+  name: master1-vaqns
+current-context: master1-vaqns

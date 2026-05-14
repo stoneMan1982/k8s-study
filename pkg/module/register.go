@@ -12,6 +12,9 @@ func NewRegistry() *Registry {
 }
 
 func (r *Registry) RegisterModule(m Module) {
+	if _, exists := r.modules[m.MetaData().Name]; exists {
+		panic("module with name " + m.MetaData().Name + " already registered")
+	}
 	r.modules[m.MetaData().Name] = m
 }
 
@@ -52,6 +55,13 @@ func (r *Registry) GetModuleService(name string) (interface{}, bool) {
 		return nil, false
 	}
 	return m.GetService(), true
+}
+
+func (r *Registry) ListModules() {
+	for _, m := range r.modules {
+		md := m.MetaData()
+		println("Module:", md.Name, "Version:", md.Version, "Description:", md.Description, "Author:", md.Author, "Kind:", md.Kind)
+	}
 }
 
 // DefaultRegistry keeps backward-compatible global helpers.
@@ -99,4 +109,8 @@ func GetServiceFromRegistry[T any](reg *Registry, name string) (T, bool) {
 
 func GetService[T any](name string) (T, bool) {
 	return GetServiceFromRegistry[T](DefaultRegistry, name)
+}
+
+func ListModules() {
+	DefaultRegistry.ListModules()
 }
